@@ -4,308 +4,471 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f7f5f2;
+            --surface: #ffffff;
+            --border: #e8e4de;
+            --accent: #c8562a;
+            --accent-light: #fdf0eb;
+            --text-primary: #1a1714;
+            --text-secondary: #6b635a;
+            --text-muted: #a89f96;
+            --tag-bg: #f0ede8;
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-header h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+        }
+
+        .page-header p {
+            margin-top: 0.5rem;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Project Card */
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 1.75rem;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+            transform: translateY(-2px);
+        }
+
+        .project-top {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+        }
+
+        .project-img-wrap {
+            position: relative;
+            overflow: hidden;
+            background: var(--tag-bg);
+        }
+
+        .project-img-wrap img {
+            width: 100%;
+            height: 100%;
+            min-height: 180px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .project-card:hover .project-img-wrap img {
+            transform: scale(1.03);
+        }
+
+        .img-placeholder {
+            width: 100%;
+            min-height: 180px;
+            background: var(--tag-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-placeholder svg {
+            width: 36px;
+            height: 36px;
+            opacity: 0.25;
+        }
+
+        .project-header {
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .project-title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .project-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+        }
+
+        .live-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 999px;
+            padding: 5px 13px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.15s, color 0.15s;
+            flex-shrink: 0;
+        }
+
+        .live-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .live-btn svg {
+            width: 11px;
+            height: 11px;
+        }
+
+        .skills-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .skill-tag {
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 3px 11px;
+            border-radius: 999px;
+            background: var(--tag-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        /* Project Body */
+        .project-body {
+            border-top: 1px solid var(--border);
+            padding: 1.5rem 1.75rem;
+        }
+
+        .project-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 1.1rem;
+        }
+
+        .contrib-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .contrib-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+        }
+
+        .contrib-list li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .contrib-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.5;
+        }
+
+        .closing-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .project-top {
+                grid-template-columns: 1fr;
+            }
+
+            .project-img-wrap img,
+            .img-placeholder {
+                min-height: 220px;
+            }
+
+            .project-header {
+                padding: 1.25rem;
+            }
+
+            .project-body {
+                padding: 1.25rem;
+            }
+
+            .contrib-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body id="page2">
+<div class="container">
 
-
-    <div class="container">
-
-       <h1 class="fproject-title">Featured Projects</h1>
-
-       <div class="fprojects">
-        <!-- Project 1 -->
-            <div class="fproject">
-                <img src="images/work-16.png" alt="Project 7 Screenshot" class="project-img">
-                <div class="fproject-info">
-                    <h3>Brush and Beyond</h3>
-                    <p><strong>Skills Used:</strong> WordPress Theme Customization, Responsive Web Design, 
-                        UI Implementation, Plugin Integration, Cross-Browser Testing.
-                    </p>
-                    <a href="https://brushnbeyond.crownpaints.co.ke/" class="link">Go live</a>
-                </div> 
-            </div>
-            <div class="fproject-info-2">
-                <p><strong>Brush & Beyond</strong> is a dynamic, campaign-driven website created to promote Crown Paints' 
-                    wide range of products, blending creativity and commercial appeal. The site was aimed 
-                    at driving engagement through vibrant visuals and structured messaging.<br>
-                    My contributions while at Kapu Digital Limited included:<br>
-                    -Custom design and theme customization in WordPress to match Crown’s brand identity.<br>
-                    -Implementing responsive layouts with HTML and CSS to ensure seamless performance on all devices.<br>         
-                    -Integrating gallery and contact plugins to support product discovery and customer inquiries.<br>        
-                    -Optimizing website performance for fast loading and smooth browsing.<br>
-                    -Conducting thorough cross-browser testing to ensure consistency.<br>   
-                    -Collaborating with designers and project managers to deliver on campaign goals.<br>       
-                    This project allowed me to bring a creative, campaign-focused vision to life through tailored WordPress development.
-                </p>
-            </div>
-
-        <!-- Project 2 -->
-            <div class="fproject">
-                <img src="images/work-14.png" alt="Project 7 Screenshot" class="project-img">
-                <div class="fproject-info">
-                    <h3>Sedgwick</h3>
-                    <p><strong>Skills Used:</strong> WordPress Content Management, Layout Structuring,
-                        Responsive Design, SEO Optimization, Accessibility Practices.
-                    </p>
-                    <a href="https://www.sedgwick.co.ke/" class="link">Go live</a>
-                </div> 
-            </div>
-            <div class="fproject-info-2">
-                <p><strong>Sedgwick</strong> is a global insurance and claims management company. The corporate website project
-                   was centered around establishing digital credibility, improving content structure, and making service information 
-                   easy to access.<br>
-                   My key contributions during the internship included:<br>
-                   -Assisting in the migration and restructuring of content within WordPress to enhance clarity and trust.<br>
-                   -Customizing templates and building responsive sections using HTML, CSS, and page builders.<br>
-                   -Enhancing the site’s navigation and user flow to ensure accessibility for a broad user base.<br>
-                   -Setting up plugins for compliance and performance enhancements.<br>
-                   -Implementing SEO basics to improve online visibility.<br>
-                   -Supporting revisions and updates based on client feedback.<br>
-                    
-                   Working on Sedgwick’s website gave me real-world experience in building formal, trust-centered digital experiences for enterprise clients.
-                </p>
-            </div>
-
-        <!-- Featured Project 3 -->
-            <div class="fproject">
-                <img src="images/work-15.png" alt="Project 7 Screenshot" class="project-img">
-                <div class="fproject-info">
-                    <h3>Success By Design</h3>
-                    <p><strong>Skills Used:</strong> WordPress Frontend Development, Content Layout Planning
-                        Form Integration, Mobile Responsiveness, Performance Optimization.
-                    </p>
-                    <a href="https://sbd.co.ke/" class="link">Go live</a>
-                </div> 
-            </div>
-            <div class="fproject-info-2">
-                <p><strong>Success By Design</strong> is a personal growth and coaching platform built to help individuals 
-                    maximize their potential through tailored mentorship and training programs. The site reflects 
-                    the brand's uplifting mission and thoughtful approach.<br>
-                    As part of the development team at Kapu Digital Limited, I:<br>
-                    -Designing and structuring the frontend using WordPress, HTML, and CSS.<br>
-                    -Built responsive page layouts to present content clearly across all devices.<br>
-                    -Integrated plugins for blog functionality, contact forms, and easy content updates.<br>
-                    -Helped shape the site's content flow and tone, aligning it with the brand’s message of empowerment.<br>
-                    -Worked closely with the content and design teams to ensure visual harmony and brand consistency.<br>
-                    -Ensured the site was optimized for speed, usability, and future scalability.<br>
-                    
-                    This project let me take a hands-on role in creating a mission-driven website that inspires and informs.
-                </p>
-            </div>
-
-        <!-- Featured Project 4 -->
-            <div class="fproject">
-                <img src="images/work-17.png" alt="Project 7 Screenshot" class="project-img">
-                <div class="fproject-info">
-                    <h3>VeggieCrate</h3>
-                    <p><strong>Skills Used:</strong> WordPress Frontend Development, Content Layout Planning
-                        Form Integration, Mobile Responsiveness, Performance Optimization.
-                    </p>
-                </div> 
-            </div>
-            <div class="fproject-info-2">
-                <p><strong>VeggieCrate</strong>is a full website I designed and developed for a local produce delivery business
-                     specializing in Irish potatoes and fresh vegetables. The goal was to create a simple, clean, 
-                     and functional online presence that allows the business to reach wholesale and retail customers efficiently.<br>
-
-                    Key Features:<br>
-                    
-                    -Fully responsive design for both desktop and mobile users<br>
-                    -Clear product presentation with focus on bulk orders and grading options<br>
-                    -Easy-to-navigate structure with clear call-to-actions (Order Now, Contact, Custom Orders)<br>
-                    -Informative sections such as About Us, Vision & Mission, Delivery Schedule, and FAQs<br>
-                    -Off-canvas mobile menu for a smooth navigation experience<br>
-                    -SEO-friendly structure to help the business gain online visibility<br>
-                    -Custom content that tells the business story, highlights the farm-to-door concept, and builds customer trust<br>
-
-                    The website provides VeggieCrate with a professional digital presence that supports its growth, simplifies customer communication, 
-                    and showcases its brand values clearly. It is designed to easily expand as the business adds more vegetables and services.
-
-                </p>
-            </div> 
-            
-        <!-- Featured Project 5 -->  
-            <div class="fproject">
-                <img src="images/work-18.png" alt="Project 7 Screenshot" class="project-img">
-                <div class="fproject-info">
-                    <h3>Darko Orphans</h3>
-                    <p><strong>Skills Used:</strong> WordPress Frontend Development, Content Layout Planning
-                        Form Integration, Mobile Responsiveness, Performance Optimization.
-                    </p>
-                    <a href="https://darkoorphans.org/" class="link">Go live</a>
-                </div> 
-            </div>
-            <div class="fproject-info-2">
-                <p><strong>Darko Orphans</strong> is a designed and developed website, a non-profit organization dedicated 
-                     to supporting vulnerable children through education, empowerment, clean water, feeding programs, 
-                     and sponsorship opportunities. The aim was to create a compassionate, engaging, 
-                     and user-friendly online presence that communicates the mission clearly while encouraging support and involvement.<br>
-
-                    Key Features:<br>
-                    
-                    -Fully responsive design for desktop and mobile<br>
-                    -Clear calls-to-action (Donate, Sponsor, Get Involved)<br>
-                    -Dedicated program pages highlighting core initiatives<br>
-                    -Inspiring visuals and transformation stories<br>
-                    -SEO-friendly structure for global reach<br>
-                    
-                    The website provides Darko Orphans with a professional digital presence that strengthens its mission, 
-                    simplifies supporter engagement, and clearly shares its impact. It is designed to grow with the organization as more programs, 
-                    stories, and partnerships are added.
-                </p>
-            </div>   
-
-        </div>
-
-
-        <h1 class="project-title">My Personal projects</h1>
-
-        <div class="projects">
-            <!-- Project 1 -->
-            <div class="project">
-                <img src="images/work-1.png" alt="Project 1 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Quote Generator</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Quote-generator.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/Quote-generator/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 2 -->
-            <div class="project">
-                <img src="images/work-2.png" alt="Project 2 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Car website</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Car-website.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/Car-website/" class="link">Go Live</a>
-                </div>
-            </div>
-
-            <!-- Project 3 -->
-            <div class="project">
-                <img src="images/work-8.png" alt="Project 3 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Ecommerce website</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Ecommerce.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p> 
-                    <a href="https://owenonkwani99.github.io/Ecommerce/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 4 -->
-            <div class="project">
-                <img src="images/work-4.png" alt="Project 4 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>To Do List app</h3>
-                    <p><a href="https://github.com/Owenonkwani99/To-Do-List-app.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/To-Do-List-app/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 5 -->
-            <div class="project">
-                <img src="images/work-5.png" alt="Project 5 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Quiz app</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Quiz-app.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/Quiz-app/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 6 -->
-            <div class="project">
-                <img src="images/work-6.png" alt="Project 6 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Calculator</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Calculator.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/Calculator/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 7 -->
-            <div class="project">
-                <img src="images/work-7.png" alt="Project 7 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Portfolio website</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Portfolio.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/Portfolio/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 8 -->
-            <div class="project">
-                <img src="images/work-3.png" alt="Project 8 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>QR code generator</h3>
-                    <p><a href="https://github.com/Owenonkwani99/QR-Code.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript</p>
-                    <a href="https://owenonkwani99.github.io/QR-Code/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 9 -->
-            <div class="project">
-                <img src="images/work-9.png" alt="Project 9 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>React To-do-list app</h3>
-                    <p><a href="https://vercel.com/owen-onkwanis-projects/react-to-do-app/7Ckzp6TAsBfMciSkfztWE8iyPUsP/source" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript, React, Tailwind</p>
-                    <a href="https://react-to-do-app-three.vercel.app/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 10 -->
-            <div class="project">
-                <img src="images/work-10.png" alt="Project 10 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>React Qr Code generator</h3>
-                    <p><a href="https://vercel.com/owen-onkwanis-projects/react-qr-code-app/H8oZETbZoLMCPRTrurCgDFyTbeFz/source" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript, React</p>
-                    <a href="https://react-qr-code-app.vercel.app/" class="link">Go live</a>
-                </div>
-            </div>
-
-             <!-- Project 11 -->
-             <div class="project">
-                <img src="images/work-11.png" alt="Project 11 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Ev-website</h3>
-                    <p><a href="https://vercel.com/owen-onkwanis-projects/ev-website/4Q13KmgfQXu7zCqhUFfUmMdpZKHH/source" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript, React</p>
-                    <a href="https://ev-website-gray.vercel.app/" class="link">Go live</a>
-                </div>
-            </div>
-
-            <!-- Project 12 -->
-            <div class="project">
-                <img src="images/work-12.png" alt="Project 12 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Name-based-predictor</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Name-based-predictor.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, Next.js, Typescript</p>
-                    <p>-----</p>
-                </div>
-            </div>
-
-            <!-- Project 13 -->
-            <div class="project">
-                <img src="images/work-13.png" alt="Project 13 Screenshot" class="project-img">
-                <div class="project-info">
-                    <h3>Note taking app</h3>
-                    <p><a href="https://github.com/Owenonkwani99/Notes-app.git" class="code" target="_blank">View Source Code</a></p>
-                    <p><strong>Languages Used:</strong> HTML, CSS, JavaScript, PHP</p>
-                    <p><b>COMING SOON</b></p>
-                </div>
-            </div>
-        </div>
+    <div class="page-header">
+        <h1>Featured Projects</h1>
+        <p>A selection of client and personal work — built, shipped, and live.</p>
     </div>
 
+    <div class="fprojects">
+
+        <!-- Project 1 -->
+        <div class="project-card">
+            <div class="project-top">
+                <div class="project-img-wrap">
+                    <img src="images/work-16.png" alt="Brush and Beyond screenshot">
+                </div>
+                <div class="project-header">
+                    <div>
+                        <div class="project-title-row">
+                            <h3 class="project-name">Brush and Beyond</h3>
+                            <a href="https://brushnbeyond.crownpaints.co.ke/" class="live-btn" target="_blank">
+                                Go live
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10L10 2M4 2h6v6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="skills-wrap">
+                        <span class="skill-tag">WordPress</span>
+                        <span class="skill-tag">Responsive design</span>
+                        <span class="skill-tag">UI implementation</span>
+                        <span class="skill-tag">Plugin integration</span>
+                        <span class="skill-tag">Cross-browser testing</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-body">
+                <p class="project-desc">A dynamic, campaign-driven website created to promote Crown Paints' wide range of products, blending creativity and commercial appeal. Aimed at driving engagement through vibrant visuals and structured messaging.</p>
+                <p class="contrib-label">My contributions at Kapu Digital Limited</p>
+                <ul class="contrib-list">
+                    <li>Custom design and theme customization in WordPress to match Crown's brand identity.</li>
+                    <li>Responsive layouts with HTML and CSS across all devices.</li>
+                    <li>Integrated gallery and contact plugins for product discovery.</li>
+                    <li>Optimized website performance for fast loading.</li>
+                    <li>Cross-browser testing to ensure consistency.</li>
+                    <li>Collaborated with designers and project managers on campaign goals.</li>
+                </ul>
+                <p class="closing-note">This project brought a creative, campaign-focused vision to life through tailored WordPress development.</p>
+            </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+            <div class="project-top">
+                <div class="project-img-wrap">
+                    <img src="images/work-14.png" alt="Sedgwick screenshot">
+                </div>
+                <div class="project-header">
+                    <div>
+                        <div class="project-title-row">
+                            <h3 class="project-name">Sedgwick</h3>
+                            <a href="https://www.sedgwick.co.ke/" class="live-btn" target="_blank">
+                                Go live
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10L10 2M4 2h6v6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="skills-wrap">
+                        <span class="skill-tag">WordPress CMS</span>
+                        <span class="skill-tag">Layout structuring</span>
+                        <span class="skill-tag">Responsive design</span>
+                        <span class="skill-tag">SEO optimization</span>
+                        <span class="skill-tag">Accessibility</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-body">
+                <p class="project-desc">A global insurance and claims management corporate website centered on digital credibility, improved content structure, and easy-to-access service information.</p>
+                <p class="contrib-label">Key contributions during internship</p>
+                <ul class="contrib-list">
+                    <li>Migrated and restructured WordPress content for clarity and trust.</li>
+                    <li>Built responsive sections using HTML, CSS, and page builders.</li>
+                    <li>Enhanced navigation and user flow for a broad user base.</li>
+                    <li>Set up plugins for compliance and performance.</li>
+                    <li>Implemented SEO basics to improve online visibility.</li>
+                    <li>Supported revisions based on client feedback.</li>
+                </ul>
+                <p class="closing-note">Real-world experience building formal, trust-centered digital experiences for enterprise clients.</p>
+            </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card">
+            <div class="project-top">
+                <div class="project-img-wrap">
+                    <img src="images/work-15.png" alt="Success By Design screenshot">
+                </div>
+                <div class="project-header">
+                    <div>
+                        <div class="project-title-row">
+                            <h3 class="project-name">Success By Design</h3>
+                            <a href="https://sbd.co.ke/" class="live-btn" target="_blank">
+                                Go live
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10L10 2M4 2h6v6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="skills-wrap">
+                        <span class="skill-tag">WordPress</span>
+                        <span class="skill-tag">Frontend development</span>
+                        <span class="skill-tag">Form integration</span>
+                        <span class="skill-tag">Mobile responsiveness</span>
+                        <span class="skill-tag">Performance optimization</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-body">
+                <p class="project-desc">A personal growth and coaching platform built to help individuals maximize their potential through tailored mentorship and training programs, reflecting the brand's uplifting mission.</p>
+                <p class="contrib-label">My contributions at Kapu Digital Limited</p>
+                <ul class="contrib-list">
+                    <li>Designed and structured the frontend using WordPress, HTML, and CSS.</li>
+                    <li>Built responsive layouts that present content clearly across all devices.</li>
+                    <li>Integrated plugins for blog functionality, contact forms, and content updates.</li>
+                    <li>Shaped site content flow and tone to match the brand's empowerment message.</li>
+                    <li>Ensured visual harmony and brand consistency with the design team.</li>
+                    <li>Optimized for speed, usability, and future scalability.</li>
+                </ul>
+                <p class="closing-note">A hands-on role in creating a mission-driven website that inspires and informs.</p>
+            </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-card">
+            <div class="project-top">
+                <div class="project-img-wrap">
+                    <img src="images/work-17.png" alt="VeggieCrate screenshot">
+                </div>
+                <div class="project-header">
+                    <div>
+                        <div class="project-title-row">
+                            <h3 class="project-name">VeggieCrate</h3>
+                        </div>
+                    </div>
+                    <div class="skills-wrap">
+                        <span class="skill-tag">WordPress</span>
+                        <span class="skill-tag">Content layout</span>
+                        <span class="skill-tag">Mobile responsiveness</span>
+                        <span class="skill-tag">SEO</span>
+                        <span class="skill-tag">Performance optimization</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-body">
+                <p class="project-desc">A full website designed and developed for a local produce delivery business specializing in Irish potatoes and fresh vegetables, providing a clean and functional online presence for wholesale and retail customers.</p>
+                <p class="contrib-label">Key features</p>
+                <ul class="contrib-list">
+                    <li>Fully responsive design for desktop and mobile.</li>
+                    <li>Clear product presentation focused on bulk orders and grading.</li>
+                    <li>Easy navigation with clear CTAs: Order Now, Contact, Custom Orders.</li>
+                    <li>Sections for About, Vision & Mission, Delivery Schedule, and FAQs.</li>
+                    <li>Off-canvas mobile menu for smooth navigation.</li>
+                    <li>SEO-friendly structure to support online visibility.</li>
+                </ul>
+                <p class="closing-note">Designed to grow as the business adds more vegetables and services.</p>
+            </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="project-card">
+            <div class="project-top">
+                <div class="project-img-wrap">
+                    <img src="images/work-18.png" alt="Darko Orphans screenshot">
+                </div>
+                <div class="project-header">
+                    <div>
+                        <div class="project-title-row">
+                            <h3 class="project-name">Darko Orphans</h3>
+                            <a href="https://darkoorphans.org/" class="live-btn" target="_blank">
+                                Go live
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10L10 2M4 2h6v6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="skills-wrap">
+                        <span class="skill-tag">WordPress</span>
+                        <span class="skill-tag">Frontend development</span>
+                        <span class="skill-tag">Form integration</span>
+                        <span class="skill-tag">Mobile responsiveness</span>
+                        <span class="skill-tag">SEO</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-body">
+                <p class="project-desc">A website for a non-profit organization dedicated to supporting vulnerable children through education, empowerment, clean water, feeding programs, and sponsorship opportunities — built to communicate the mission clearly and encourage involvement.</p>
+                <p class="contrib-label">Key features</p>
+                <ul class="contrib-list">
+                    <li>Fully responsive design for desktop and mobile.</li>
+                    <li>Clear CTAs: Donate, Sponsor, Get Involved.</li>
+                    <li>Dedicated program pages highlighting core initiatives.</li>
+                    <li>Inspiring visuals and transformation stories.</li>
+                    <li>SEO-friendly structure for global reach.</li>
+                    <li>Designed to grow with new programs and partnerships.</li>
+                </ul>
+                <p class="closing-note">A professional digital presence that strengthens the mission and simplifies supporter engagement.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>
