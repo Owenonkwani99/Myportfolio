@@ -237,6 +237,27 @@
             line-height: 1.6;
         }
 
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            transition: color 0.2s, gap 0.2s;
+        }
+
+        .back-btn:hover { color: var(--accent); gap: 8px; }
+
+        .back-btn svg {
+            width: 16px; height: 16px;
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover svg { transform: translateX(-3px); }
+
         /* Responsive */
         @media (max-width: 640px) {
             .project-top {
@@ -264,6 +285,13 @@
 </head>
 <body id="page2">
 <div class="container">
+
+    <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 3L5 8l5 5"/>
+        </svg>
+        Back to home
+    </a>
 
     <div class="page-header">
         <h1>Featured Projects</h1>
